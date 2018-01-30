@@ -1,65 +1,53 @@
 package dev.sgp.web;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dev.sgp.entite.Collaborateur;
+import dev.sgp.service.CollaborateurService;
+import dev.sgp.util.Constantes;
+
 public class EditerCollaborateurController extends HttpServlet {
+	
+	private CollaborateurService collabService = Constantes.COLLAB_SERVICE;
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		resp.getWriter().write("<h1>Edition des Collaborateurs</h1>");
-
 		String matricule = req.getParameter("matricule");
+		
+		req.getRequestDispatcher("/WEB-INF/views/collab/creerCollaborateurs.jsp").forward(req, resp);
 
-		resp.setContentType("text/html");
-
-		if (matricule == null) {	
-			resp.sendError(400, "Un matricule est attendu");
-		} else {
-			resp.getWriter().write("Matricule: " + matricule);
-		}
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {
 		
-		boolean paramMissing = false;
-		StringBuilder resError = new StringBuilder("Les parametres suivants sont incorrects: ");
-		
-		String matricule = req.getParameter("matricule");
-		String titre = req.getParameter("titre");
+		String adresse = req.getParameter("adresse");
+		String numeroSecu = req.getParameter("numeroSecu");
 		String nom = req.getParameter("nom");
 		String prenom = req.getParameter("prenom");
+		String dateNaissanceString = req.getParameter("dateNaissance");
 		
-		if(matricule.isEmpty()) {
-			paramMissing = true;
-			resError.append("matricule ");
-		}
-		if(titre.isEmpty()) {
-			paramMissing = true;
-			resError.append("titre ");
-		}
-		if(nom.isEmpty()) {
-			paramMissing = true;
-			resError.append("nom ");
-		}
-		if(prenom.isEmpty()) {
-			paramMissing = true;
-			resError.append("prenom ");
-		}
+		String[] dateElement = dateNaissanceString.split("-");	
+		int annee = Integer.parseInt(dateElement[0]);
+		int mois = Integer.parseInt(dateElement[1]);
+		int jour = Integer.parseInt(dateElement[2]);
 		
-		if(paramMissing) {
-			resp.sendError(400, resError.toString());
-		}
-		else {
-			resp.setStatus(201);
-			resp.getWriter().write("Creation d'un collaborateur avec les infos suivantes: ");
-			resp.getWriter().write("matricule= "+matricule+", titre= "+titre+", prenom= "+prenom+", nom= "+nom);
-		}
+		LocalDate date = LocalDate.of(annee, mois, jour);
 		
+		Collaborateur collab = new Collaborateur(nom, prenom, date, adresse, numeroSecu);
 		
+		collabService.sauvegarderCollaborateur(collab);
+		
+		req.setAttribute("listeNoms", collabService.listerCollaborateur());
+		req.getRequestDispatcher("/WEB-INF/views/collab/listerCollaborateurs.jsp").forward(req, resp);
+	
 	}
 }

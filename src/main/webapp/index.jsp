@@ -1,4 +1,9 @@
 <html>
+<head>
+	<meta charset="UTF-8">
+	<title>SGP - App</title>
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.css">
+</head>
 <body>
 	<h2>Hello Michael Jordan Ferre !</h2>
 	<form name="monForm" method="post"
