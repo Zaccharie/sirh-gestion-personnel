@@ -8,6 +8,7 @@ public class Collaborateur {
 	private String matricule;
 	private String nom;
 	private String prenom;
+	private String intitulePoste;
 	private LocalDate dateNaissance;
 	private String adresse;
 	private String numeroSecu;
@@ -22,7 +23,7 @@ public class Collaborateur {
 		
 	}
 	
-	public Collaborateur(String matricule, String nom, String prenom, LocalDate dateNaissance, String adresse,
+	public Collaborateur(String matricule, String nom, String prenom, String intitulePoste, LocalDate dateNaissance, String adresse,
 			String numeroSecu, String emailPro, String photo, ZonedDateTime dateHeureCreation, Boolean actif) {
 		super();
 		this.matricule = matricule;
@@ -34,9 +35,18 @@ public class Collaborateur {
 		this.emailPro = emailPro;
 		this.photo = photo;
 		this.dateHeureCreation = dateHeureCreation;
+		this.intitulePoste = intitulePoste;
 		this.actif = actif;
 	}
 	
+	public String getIntitulePoste() {
+		return intitulePoste;
+	}
+
+	public void setIntitulePoste(String intitulePoste) {
+		this.intitulePoste = intitulePoste;
+	}
+
 	public Collaborateur( String nom, String prenom, LocalDate dateNaissance, String adresse,
 			String numeroSecu) {
 		
@@ -49,6 +59,7 @@ public class Collaborateur {
 		this.adresse = adresse;
 		this.numeroSecu = numeroSecu;
 		this.actif = true;
+		this.intitulePoste = "Developpeur";
 		this.dateHeureCreation = ZonedDateTime.now();
 		this.matricule = "M"+Collaborateur.nbrInstanceCollab;
 		this.emailPro = prenom+"."+nom+"@societe.com";
